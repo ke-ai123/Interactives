@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Stationery Are You? | Working Style Discovery</title>
+<style>
+:root{
+ --ink:#29323b;--muted:#66717d;--paper:#fffdf8;--line:#e8e3d9;--lav:#eee9fb;
+ --yellow:#f6df79;--pink:#f6dce3;--blue:#dceaf5;--green:#dcebdc;--peach:#f8e2d2;
+ --shadow:0 12px 34px rgba(47,55,66,.09)
+}
+*{box-sizing:border-box}
+body{margin:0;background:#f4f1eb;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55}
+button,textarea{font:inherit}
+.wrap{max-width:900px;margin:0 auto;padding:26px 16px 60px}
+.hero,.panel,.result-card{background:var(--paper);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow)}
+.hero{overflow:hidden;margin-bottom:20px}
+.hero-art{padding:30px 30px 24px;background:linear-gradient(135deg,#f7e8c8,#f4e6e9 52%,#e3edf3)}
+.eyebrow{font-size:.72rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#6e6870}
+h1{font-family:Georgia,serif;font-size:clamp(2.3rem,7vw,4.1rem);line-height:1.02;letter-spacing:-.045em;margin:12px 0}
+.subtitle{max-width:610px;font-size:1.05rem;color:#4e5862}
+.stationery-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:24px}
+.stationery{display:grid;place-items:center;width:58px;height:58px;border-radius:17px;background:#ffffffb8;font-size:2rem;box-shadow:0 5px 12px #54452a12}
+.intro{padding:22px 28px 25px}
+.note{background:#f6f3ed;border-left:4px solid #d5b86d;padding:14px 16px;border-radius:10px;color:#505a63}
+.panel{padding:22px;margin:18px 0}
+.progress-line{height:8px;background:#eeeae2;border-radius:99px;overflow:hidden;margin:10px 0 22px}
+.progress-fill{height:100%;width:0;background:#788b9b;transition:width .25s}
+.topline{display:flex;justify-content:space-between;gap:12px;align-items:center;color:var(--muted);font-size:.9rem}
+.qnum{font-size:.75rem;font-weight:800;letter-spacing:.12em;color:#8b7780}
+h2{font-family:Georgia,serif;font-size:1.65rem;line-height:1.2;margin:8px 0 18px}
+.options{display:grid;gap:10px}
+.option{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;border:1.5px solid var(--line);border-radius:14px;padding:14px 15px;background:#fffefa;color:var(--ink);cursor:pointer;transition:.15s}
+.option:hover{border-color:#9aabb8;transform:translateY(-1px)}
+.option[aria-pressed="true"]{border-color:#647d8d;background:#edf3f6;box-shadow:0 0 0 2px #647d8d18}
+.dot{width:20px;height:20px;flex:0 0 20px;border:1.5px solid #aeb7bd;border-radius:50%;margin-top:2px;display:grid;place-items:center}
+.option[aria-pressed="true"] .dot:after{content:"";width:9px;height:9px;border-radius:50%;background:#647d8d}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:20px}
+.btn{border:0;border-radius:999px;padding:12px 20px;font-weight:750;cursor:pointer}
+.btn.primary{background:#344b5b;color:white}
+.btn.secondary{background:#eeeae2;color:#39434b}
+.btn:disabled{opacity:.38;cursor:not-allowed}
+.small{font-size:.88rem;color:var(--muted)}
+.hidden{display:none!important}
+.result-head{text-align:center;padding:26px 20px;background:linear-gradient(135deg,#f8ebc9,#f3e5eb 55%,#e3edf4);border-radius:20px}
+.big-emoji{font-size:4.2rem;line-height:1.2}
+.result-head h2{font-size:2.2rem;margin:8px 0 0}
+.tag{display:inline-block;margin-top:7px;padding:5px 12px;border-radius:999px;background:#ffffffb8;font-size:.8rem;font-weight:800;letter-spacing:.04em}
+.profile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}
+.info{padding:17px;border-radius:16px;background:#f7f5ef}
+.info h3{font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;margin:0 0 9px;color:#68737c}
+.info ul{padding-left:19px;margin:0}
+.info li{margin:5px 0}
+.info.wide{grid-column:1/-1}
+.secondary-style{display:flex;gap:14px;align-items:center;background:#f0edf8;padding:15px;border-radius:15px}
+.secondary-style .big-emoji{font-size:2.5rem}
+.reflection{width:100%;min-height:90px;border:1px solid var(--line);border-radius:12px;padding:12px;background:#fffefa;resize:vertical}
+.infographic{margin-top:22px}
+.infographic h2{margin-bottom:6px}
+.profile-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
+.tile{border-radius:17px;padding:16px;border:1px solid #e8e2d7;min-height:180px}
+.tile:last-child{grid-column:1/-1}
+.tile-top{display:flex;gap:10px;align-items:center}
+.tile-emoji{font-size:2.2rem}
+.tile h3{margin:0;font-family:Georgia,serif;font-size:1.1rem}
+.tile .role{font-size:.76rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;opacity:.7}
+.tile p{font-size:.9rem;margin:10px 0 7px}
+.tile .watch{font-size:.82rem;color:#535c63}
+.tile.yellow{background:#fbf2ce}.tile.pink{background:#f9e9ed}.tile.blue{background:#eaf1f7}.tile.green{background:#eaf2e8}.tile.peach{background:#faeee5}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
+.footer{text-align:center;color:#7b8389;font-size:.8rem;margin-top:25px}
+@media(max-width:600px){.wrap{padding:14px 12px 40px}.hero-art{padding:24px 20px}.intro{padding:18px 20px}.panel{padding:17px}.profile-grid,.profile-tiles{grid-template-columns:1fr}.info.wide,.tile:last-child{grid-column:auto}.nav .btn{padding:11px 15px}}
+@media print{body{background:white}.wrap{max-width:none;padding:0}.hero,.panel,.result-card{box-shadow:none}.actions,.nav,.progress-line{display:none!important}.tile,.info,.result-head{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <header class="hero">
+  <div class="hero-art">
+   <div class="eyebrow">A light-hearted working-style discovery</div>
+   <h1>What stationery<br>are you?</h1>
+   <div class="subtitle">A little self-discovery to help us understand how we work, what we bring to a team, and what helps us work well together.</div>
+   <div class="stationery-row" aria-hidden="true">
+    <div class="stationery">🖍️</div><div class="stationery">🗒️</div><div class="stationery">✏️</div><div class="stationery">📎</div><div class="stationery">🖊️</div>
+   </div>
+  </div>
+  <div class="intro">
+   <div class="note"><strong>Before you begin</strong><br>Don't overthink your answers! There are no right or wrong answers, and this isn't a test of how good you are at your job. Think about your usual, natural way of working — not what you think you should do, or what your role sometimes requires. If you find yourself thinking “it depends”, choose what you would most naturally do when given the choice.</div>
+   <p class="small">8 questions · Around 3–5 minutes · Choose one answer for each question</p>
+  </div>
+ </header>
+
+ <main id="quiz" class="panel">
+  <div class="topline"><span id="progressText">Question 1 of 8</span><span id="answeredText">0 answered</span></div>
+  <div class="progress-line"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="qnum" id="qNum">QUESTION 01</div>
+  <h2 id="questionText"></h2>
+  <div class="options" id="options"></div>
+  <div class="nav">
+   <button class="btn secondary" id="backBtn" type="button">← Back</button>
+   <button class="btn primary" id="nextBtn" type="button" disabled>Next →</button>
+  </div>
+ </main>
+
+ <section id="results" class="panel hidden" aria-live="polite">
+  <div id="resultContent"></div>
+  <div class="actions">
+   <button class="btn primary" type="button" onclick="window.print()">Print / Save as PDF</button>
+   <button class="btn secondary" type="button" id="copyBtn">Copy my profile</button>
+   <button class="btn secondary" type="button" id="restartBtn">Retake quiz</button>
+  </div>
+  <p class="small">Your result is generated on this device. Answers are not automatically sent to anyone or stored in a team dashboard.</p>
+ </section>
+ <div class="footer">Different tools, different strengths. Better work, together.</div>
+</div>
+<script>
+const profiles={
+ H:{name:"The Highlighter",role:"The Clarifier",emoji:"🖍️",color:"yellow",summary:"You have a knack for seeing what matters and bringing people back to the bigger picture. You help teams cut through the noise and move towards meaningful outcomes.",strengths:["Identifying priorities","Communicating key messages","Keeping the team outcome-focused"],watch:"You may move quickly towards the main point and unintentionally overlook details, nuances or alternative perspectives.",best:"Clear objectives, shared priorities and the freedom to make meaningful progress.",team:"Tell me the outcome we're working towards. I appreciate concise updates and honest conversations."},
+ S:{name:"The Sticky Note",role:"The Connector",emoji:"🗒️",color:"pink",summary:"You thrive on possibilities and people. You bring perspectives together, spark conversations and help others see connections they might have missed.",strengths:["Generating ideas and possibilities","Building connections and collaboration","Seeing opportunities across perspectives"],watch:"You may have many ideas in motion and find it challenging to narrow them down or see every idea through.",best:"An open environment where ideas are welcomed, people can contribute and there is room to explore.",team:"Let me bounce ideas with you. I appreciate being included early in the conversation."},
+ P:{name:"The Mechanical Pencil",role:"The Thinker",emoji:"✏️",color:"blue",summary:"You bring thoughtfulness and rigour to the team. You like to understand the details, think through implications and produce work that stands up to scrutiny.",strengths:["Analytical and critical thinking","Attention to detail and quality","Anticipating risks and considering alternatives"],watch:"You may spend too long weighing possibilities or feel uncomfortable making decisions without sufficient information.",best:"Time to think, clear information and space to work through problems carefully.",team:"Give me context and time to process. I appreciate considered discussions rather than rushed decisions."},
+ B:{name:"The Binder Clip",role:"The Organiser",emoji:"📎",color:"green",summary:"You are the steady force that keeps things together. You bring order to moving parts, turn intentions into action and help teams deliver what they set out to do.",strengths:["Planning and coordination","Reliability and follow-through","Keeping people accountable and aligned"],watch:"You may take on too much, become overly attached to plans or find it difficult to delegate and adapt.",best:"Clear roles, realistic timelines and shared accountability.",team:"Let's agree on who is doing what and by when. I value reliability and timely communication."},
+ G:{name:"The Gel Pen",role:"The Spark",emoji:"🖊️",color:"peach",summary:"You bring colour, energy and fresh thinking to the team. You enjoy trying new approaches, challenging the usual way of doing things and making work more engaging.",strengths:["Creative problem-solving","Fresh perspectives and experimentation","Bringing enthusiasm and energy"],watch:"You may lose interest in repetitive tasks, jump between ideas or need support translating creative possibilities into practical plans.",best:"Autonomy, room to experiment and opportunities to try something different.",team:"Give me room to explore and experiment. I appreciate openness to new possibilities."}
+};
+const questions=[
+ {q:"You've just been assigned a new project. The objective is broad, but there are no detailed instructions yet. What's your first instinct?",a:[
+  ["H","Identify the two or three things that matter most to the outcome."],["P","Work out what information I need before deciding how to proceed."],["S","Find out what others think and start exchanging ideas."],["B","Break the project into tasks, stages and responsibilities."],["G","Imagine a few different ways we could approach it."]]},
+ {q:"During a team meeting, the discussion is going in several directions. What are you most likely to do?",a:[
+  ["S","Build on what others have said and explore connections between their ideas."],["B","Help organise the ideas into decisions and practical next steps."],["G","Introduce a fresh angle or possibility the group hasn't considered."],["H","Pick out the key points and bring the group back to the main objective."],["P","Ask questions to understand the different perspectives and implications."]]},
+ {q:"You're working on a task and realise something isn't going as planned. What's your first response?",a:[
+  ["P","Pause to understand what's causing the issue and what the implications are."],["G","Try a different approach and see whether it works better."],["H","Identify the main issue and what needs attention first."],["S","Talk it through with the people involved and explore options together."],["B","Reorganise the steps and work out what needs to happen next."]]},
+ {q:"At the end of a project, which outcome gives you the greatest sense of satisfaction?",a:[
+  ["B","Everything was coordinated and delivered as planned."],["G","We created something fresh that people found useful or exciting."],["P","The final work was thoughtful, accurate and of high quality."],["H","The team achieved what really mattered."],["S","People came together and created something collectively."]]},
+ {q:"A colleague is updating you on a piece of work you're involved in. What kind of update is most helpful to you?",a:[
+  ["G","A chance to explore possibilities and what we could do next."],["H","The key message, what has changed and what needs my attention."],["B","A clear update on progress, responsibilities and deadlines."],["S","A conversation where we can exchange thoughts and ask questions."],["P","The background, relevant details and time to consider them."]]},
+ {q:"Your team has several competing deadlines this week. How do you naturally approach the situation?",a:[
+  ["S","Check in with people and see how we can support one another."],["P","Consider the demands carefully so that quality isn't compromised."],["B","Review the workload and coordinate who will do what, and by when."],["G","Look for a different or more efficient way to get the work done."],["H","Work out which deliverables matter most and focus on those first."]]},
+ {q:"You're collaborating with someone whose working style is quite different from yours. What are you most likely to find challenging?",a:[
+  ["H","Conversations that go on without reaching the main point."],["G","Being expected to follow an established approach without room to try alternatives."],["S","Working separately without sharing ideas or checking in."],["P","Having to make decisions before the important details are clear."],["B","Unclear responsibilities or agreements that aren't followed through."]]},
+ {q:"Imagine you have a choice in how to approach a piece of work. Which condition would help you do your best?",a:[
+  ["P","Having time and space to think things through."],["B","Having a clear plan, agreed expectations and structure."],["H","Knowing the purpose and what success looks like."],["S","Having people to collaborate with and bounce ideas off."],["G","Having the freedom to experiment and try something different."]]}
+];
+let current=0,answers=Array(questions.length).fill(null),displayOptions=[];
+const $=id=>document.getElementById(id);
+function shuffle(arr){let a=[...arr];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function render(){
+ const q=questions[current];
+ if(!displayOptions[current])displayOptions[current]=shuffle(q.a);
+ $("progressText").textContent=`Question ${current+1} of ${questions.length}`;
+ $("answeredText").textContent=`${answers.filter(Boolean).length} answered`;
+ $("progressFill").style.width=`${(current+1)/questions.length*100}%`;
+ $("qNum").textContent=`QUESTION ${String(current+1).padStart(2,"0")}`;
+ $("questionText").textContent=q.q;
+ $("options").innerHTML="";
+ displayOptions[current].forEach(([key,label],i)=>{
+  const b=document.createElement("button");b.type="button";b.className="option";b.setAttribute("aria-pressed",answers[current]===key?"true":"false");
+  b.innerHTML=`<span class="dot" aria-hidden="true"></span><span>${label}</span>`;
+  b.addEventListener("click",()=>{answers[current]=key;render();});$("options").appendChild(b);
+ });
+ $("backBtn").disabled=current===0;
+ $("nextBtn").disabled=!answers[current];
+ $("nextBtn").textContent=current===questions.length-1?"See my result →":"Next →";
+}
+$("backBtn").addEventListener("click",()=>{if(current>0){current--;render();}});
+$("nextBtn").addEventListener("click",()=>{if(!answers[current])return;if(current<questions.length-1){current++;render();}else showResults();});
+function showResults(){
+ const scores={H:0,S:0,P:0,B:0,G:0};answers.forEach(a=>scores[a]++);
+ const ranked=Object.keys(scores).sort((a,b)=>scores[b]-scores[a]);
+ const top=ranked[0],second=ranked[1],ties=ranked.filter(k=>scores[k]===scores[top]);
+ const p=profiles[top],s=profiles[second];
+ const strengths=p.strengths.map(x=>`<li>${x}</li>`).join("");
+ const allTiles=Object.keys(profiles).map(k=>{const x=profiles[k];return `<article class="tile ${x.color}"><div class="tile-top"><span class="tile-emoji">${x.emoji}</span><div><div class="role">${x.role}</div><h3>${x.name}</h3></div></div><p>${x.summary}</p><div class="watch"><strong>Watch-out:</strong> ${x.watch}</div></article>`;}).join("");
+ const tieText=ties.length>1?`<p class="small"><strong>You have a blended result.</strong> Your highest-scoring styles are ${ties.map(k=>profiles[k].name).join(" and ")}. The first shown is simply one useful starting point — feel free to identify with both.</p>`:"";
+ $("resultContent").innerHTML=`
+ <div class="result-head"><div class="eyebrow">YOUR STATIONERY IDENTITY</div><div class="big-emoji">${p.emoji}</div><h2>${p.name}</h2><div class="tag">${p.role}</div><p>${p.summary}</p>${tieText}</div>
+ <div class="profile-grid">
+  <div class="info"><h3>Your superpowers</h3><ul>${strengths}</ul></div>
+  <div class="info"><h3>A watch-out to notice</h3><p>${p.watch}</p></div>
+  <div class="info"><h3>I work best when…</h3><p>${p.best}</p></div>
+  <div class="info"><h3>How to work with me</h3><p>${p.team}</p></div>
+ </div>
+ <div class="secondary-style"><div class="big-emoji">${s.emoji}</div><div><div class="eyebrow">YOUR NEXT-HIGHEST STYLE</div><strong>${s.name} · ${s.role}</strong><div class="small">${s.summary}</div></div></div>
+ <div class="info wide" style="margin-top:16px"><h3>A thought to take back to your team</h3><p>What's one thing you wish your colleagues knew about working with you?</p><textarea class="reflection" id="reflection" placeholder="I work best when…"></textarea></div>
+ <div class="infographic"><div class="eyebrow">THE STATIONERY LINE-UP</div><h2>Five styles. One team.</h2><p class="small">A quick visual guide to the different strengths and watch-outs each style may bring. No style is better than another — teams benefit from a mix.</p><div class="profile-tiles">${allTiles}</div></div>`;
+ $("quiz").classList.add("hidden");$("results").classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"});
+ $("copyBtn").onclick=()=>{const reflection=$("reflection")?.value||"";const text=`MY STATIONERY PROFILE\n${p.emoji} ${p.name} — ${p.role}\n\n${p.summary}\n\nSuperpowers: ${p.strengths.join("; ")}\nWatch-out: ${p.watch}\nI work best when: ${p.best}\nHow to work with me: ${p.team}\nSecondary style: ${s.name} — ${s.role}\nMy reflection: ${reflection}`;navigator.clipboard?.writeText(text).then(()=>alert("Your profile has been copied.")).catch(()=>alert("Copy isn't available in this browser. You can print or save your profile as a PDF instead."));};
+ $("restartBtn").onclick=()=>{current=0;answers=Array(questions.length).fill(null);displayOptions=[];$("results").classList.add("hidden");$("quiz").classList.remove("hidden");render();window.scrollTo({top:0,behavior:"smooth"});};
+}
+render();
+</script>
+</body>
+</html>
